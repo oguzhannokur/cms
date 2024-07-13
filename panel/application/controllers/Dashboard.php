@@ -8,7 +8,9 @@ class Dashboard extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-
+        error_reporting(0);
+        $this->load->library("session");
+        $this->load->helper('url');
         $this->viewFolder="dashboard_v";
     }
 
@@ -16,4 +18,8 @@ class Dashboard extends CI_Controller {
 	{
 		$this->load->view("{$this->viewFolder}/index");
 	}
+
+    public function test(){
+        echo "test";
+    }
 }

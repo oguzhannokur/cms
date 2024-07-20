@@ -280,13 +280,15 @@ class Product extends CI_Controller
         );
 
         $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
-
     }
 
     public function image_upload($id){
 
+        $file_name = convertToSEO(pathinfo($_FILES["file"]["name"], PATHINFO_FILENAME)) . "." . pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
+
         $config["allowed_types"] = "jpg|jpeg|png";
         $config["upload_path"]   = "uploads/$this->viewFolder/";
+        $config["file_name"] = $file_name;
 
         $this->load->library("upload", $config);
 
@@ -306,9 +308,31 @@ class Product extends CI_Controller
                     "product_id"    => $id
                 )
             );
+
+
         } else {
             echo "islem basarisiz";
         }
+
+    }
+
+    public function refresh_image_list($id){
+
+        $viewData = new stdClass();
+
+        /** View'e gönderilecek Değişkenlerin Set Edilmesi.. */
+        $viewData->viewFolder = $this->viewFolder;
+        $viewData->subViewFolder = "image";
+
+        $viewData->item_images = $this->product_image_model->get_all(
+            array(
+                "product_id"    => $id
+            )
+        );
+
+        $render_html = $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/render_elements/image_list_v", $viewData, true);
+
+        echo $render_html;
 
     }
 
